@@ -1,0 +1,85 @@
+// components/forms/login-form.tsx
+'use client';
+
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { LoginSchema } from '@/types/zod-schema';
+import { createClient } from '@/utils/supabase/client';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+
+export type LoginInput = z.infer<typeof LoginSchema>;
+
+export default function LoginForm() {
+  const router = useRouter();
+  const supabase = createClient();
+  const [formError, setFormError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(LoginSchema),
+  });
+
+  const onSubmit = async (values: LoginInput) => {
+    setFormError(null);
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (error) {
+      setFormError(error.message);
+      setLoading(false);
+      return;
+    }
+
+    // Now check role
+    const { data: role, error: roleError } = await supabase.rpc('get_user_role');
+
+    if (roleError || !role || !['admin', 'manager'].includes(role)) {
+      await supabase.auth.signOut();
+      setFormError('You are not authorized to access the admin panel.');
+      setLoading(false);
+      return;
+    }
+
+    router.push('/admin');
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto">
+      <div>
+        <Input
+          type="email"
+          placeholder="Email"
+          {...register('email')}
+        />
+        {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+      </div>
+      <div>
+        <Input
+          type="password"
+          placeholder="Password"
+          {...register('password')}
+        />
+        {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+      </div>
+
+      {formError && <p className="text-sm text-red-500">{formError}</p>}
+
+      <Button type="submit" disabled={loading} className="w-full">
+        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Login'}
+      </Button>
+    </form>
+  );
+}
