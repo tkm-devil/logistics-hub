@@ -184,21 +184,6 @@ export default function Sidebar({
               </div>
             </div>
           )}
-
-          {!isMobile && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => {}}
-              className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              {isCollapsed ? (
-                <ChevronRight className="h-4 w-4" />
-              ) : (
-                <ChevronLeft className="h-4 w-4" />
-              )}
-            </Button>
-          )}
         </div>
 
         {/* Search */}

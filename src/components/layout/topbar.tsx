@@ -23,6 +23,10 @@ import {
   Monitor,
   Truck,
   Package,
+  Clock,
+  RotateCcw,
+  LayoutDashboard,
+  FlaskRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -52,6 +56,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { updateUserPreferences } from "@/utils/preferences";
+import { getCurrentTimeInTimezone } from "@/utils/time";
+import { getUserPreferences } from "@/utils/preferences";
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -362,50 +369,6 @@ export default function Topbar({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Theme Switcher */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                {theme === "dark" ? (
-                  <Moon className="h-5 w-5" />
-                ) : theme === "light" ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Monitor className="h-5 w-5" />
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Theme</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => setTheme("light")}
-                className="cursor-pointer"
-              >
-                <Sun className="mr-2 h-4 w-4" />
-                Light
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setTheme("dark")}
-                className="cursor-pointer"
-              >
-                <Moon className="mr-2 h-4 w-4" />
-                Dark
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setTheme("system")}
-                className="cursor-pointer"
-              >
-                <Monitor className="mr-2 h-4 w-4" />
-                System
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -441,12 +404,18 @@ export default function Topbar({
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={() => router.push("/admin/profile")}
+                className="cursor-pointer"
+              >
                 <User className="mr-2 h-4 w-4" />
                 Profile Settings
               </DropdownMenuItem>
 
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                onClick={() => router.push("/admin/security")}
+                className="cursor-pointer"
+              >
                 <Shield className="mr-2 h-4 w-4" />
                 Security
               </DropdownMenuItem>
@@ -457,13 +426,96 @@ export default function Topbar({
                   Preferences
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem className="cursor-pointer">
-                    <Globe className="mr-2 h-4 w-4" />
-                    Language
+                  <DropdownMenuItem
+                    onClick={() => router.push("/admin/preferences/language")}
+                    className="cursor-pointer"
+                  >
+                    <Globe className="mr-2 h-4 w-4" /> Language
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Display
+
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="cursor-pointer">
+                      <Monitor className="mr-2 h-4 w-4" /> Appearance
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setTheme("light");
+                        }}
+                      >
+                        {" "}
+                        <Sun className="mr-2 h-4 w-4" /> Light{" "}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setTheme("dark");
+                        }}
+                      >
+                        {" "}
+                        <Moon className="mr-2 h-4 w-4" /> Dark{" "}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setTheme("system");
+                        }}
+                      >
+                        {" "}
+                        <Monitor className="mr-2 h-4 w-4" /> System{" "}
+                      </DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuSub>
+
+                  <DropdownMenuItem
+                    onClick={() => router.push("/admin/preferences/timezone")}
+                    className="cursor-pointer"
+                  >
+                    <Clock className="mr-2 h-4 w-4" /> Timezone
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push("/admin/preferences/notifications")
+                    }
+                    className="cursor-pointer"
+                  >
+                    <Bell className="mr-2 h-4 w-4" /> Notifications
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => router.push("/admin/preferences/layout")}
+                    className="cursor-pointer"
+                  >
+                    <LayoutDashboard className="mr-2 h-4 w-4" /> Layout
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => router.push("/admin/preferences/beta")}
+                    className="cursor-pointer"
+                  >
+                    <FlaskRound className="mr-2 h-4 w-4" /> Beta Features
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      const {
+                        data: { user },
+                      } = await supabase.auth.getUser();
+                      if (user) {
+                        await updateUserPreferences(user.id, {
+                          theme: "system",
+                          language: "en",
+                          timezone: "UTC",
+                          sidebar_collapsed: false,
+                          beta_features_enabled: false,
+                          notifications_enabled: true,
+                        });
+                        location.reload();
+                      }
+                    }}
+                    className="cursor-pointer text-red-600 dark:text-red-400"
+                  >
+                    <RotateCcw className="mr-2 h-4 w-4" /> Reset Preferences
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
