@@ -4,17 +4,22 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, CheckCircle, XCircle } from "lucide-react";
+import { ArrowUpDown, CheckCircle, PencilIcon, XCircle } from "lucide-react";
 import { z } from "zod";
 import { UserSchema } from "@/types/zod-schema";
+import Link from "next/link";
+import { useMemo } from "react";
 
 export type User = z.infer<typeof UserSchema>;
 
 interface UserTableProps {
   data: User[];
+  onEdit: (user: User) => void;
 }
 
-export const userColumns: ColumnDef<User>[] = [
+export const userColumns = (
+  onEdit: (user: User) => void
+): ColumnDef<User>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => (
@@ -50,18 +55,43 @@ export const userColumns: ColumnDef<User>[] = [
     accessorKey: "created_at",
     header: "Created",
     cell: ({ row }) => {
-      const date = row.getValue("created_at") as Date | undefined;
-      return date instanceof Date && !isNaN(date.getTime())
-        ? date.toLocaleDateString()
+      const raw = row.getValue("created_at");
+      const date = raw ? new Date(raw as string) : null;
+
+      return date && !isNaN(date.getTime())
+        ? date.toLocaleDateString("en-IN", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })
         : "-";
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-blue-600 hover:underline flex items-center gap-1"
+          onClick={() => onEdit(user)}
+        >
+          <PencilIcon className="w-4 h-4" />
+          Edit
+        </Button>
+      );
     },
   },
 ];
 
-export default function UserTable({ data }: UserTableProps) {
+export default function UserTable({ data, onEdit }: UserTableProps) {
+  const columns = useMemo(() => userColumns(onEdit), [onEdit]);
   return (
     <DataTable
-      columns={userColumns}
+      columns={columns}
       data={data}
       searchPlaceholder="Search users..."
     />
