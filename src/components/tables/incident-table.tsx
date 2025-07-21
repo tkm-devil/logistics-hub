@@ -4,7 +4,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, CheckCircle, XCircle } from "lucide-react";
+import { ArrowUpDown, CheckCircle, XCircle, Pencil, Trash } from "lucide-react";
 import { z } from "zod";
 import { IncidentSchema } from "@/types/zod-schema";
 
@@ -12,9 +12,14 @@ export type Incident = z.infer<typeof IncidentSchema>;
 
 interface IncidentTableProps {
   data: Incident[];
+  onEdit?: (incident: Incident) => void;
+  onDelete?: (incident: Incident) => void;
 }
 
-export const incidentColumns: ColumnDef<Incident>[] = [
+export const incidentColumns = (
+  onEdit?: (incident: Incident) => void,
+  onDelete?: (incident: Incident) => void
+): ColumnDef<Incident>[] => [
   {
     accessorKey: "title",
     header: ({ column }) => (
@@ -26,14 +31,8 @@ export const incidentColumns: ColumnDef<Incident>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: "type",
-    header: "Type",
-  },
-  {
-    accessorKey: "severity",
-    header: "Severity",
-  },
+  { accessorKey: "type", header: "Type" },
+  { accessorKey: "severity", header: "Severity" },
   {
     accessorKey: "resolved",
     header: "Resolved",
@@ -56,12 +55,41 @@ export const incidentColumns: ColumnDef<Incident>[] = [
         : "-";
     },
   },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const incident = row.original;
+      return (
+        <div className="flex gap-2">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => onEdit?.(incident)}
+          >
+            <Pencil className="w-4 h-4" />
+          </Button>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => onDelete?.(incident)}
+          >
+            <Trash className="w-4 h-4" />
+          </Button>
+        </div>
+      );
+    },
+  },
 ];
 
-export default function IncidentTable({ data }: IncidentTableProps) {
+export default function IncidentTable({
+  data,
+  onEdit,
+  onDelete,
+}: IncidentTableProps) {
   return (
     <DataTable
-      columns={incidentColumns}
+      columns={incidentColumns(onEdit, onDelete)}
       data={data}
       searchPlaceholder="Search incidents..."
     />

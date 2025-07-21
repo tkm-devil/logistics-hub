@@ -1,7 +1,7 @@
 // src/lib/queries/incidents.ts
 
 import { z } from "zod";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import {
   CreateIncidentSchema,
   UpdateIncidentSchema,
