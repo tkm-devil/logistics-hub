@@ -4,7 +4,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, PencilIcon } from "lucide-react";
 import { z } from "zod";
 import { ShipmentSchema } from "@/types/zod-schema";
 
@@ -12,9 +12,12 @@ export type Shipment = z.infer<typeof ShipmentSchema>;
 
 interface ShipmentTableProps {
   data: Shipment[];
+  onEdit: (shipment: Shipment) => void;
 }
 
-export const shipmentColumns: ColumnDef<Shipment>[] = [
+export const shipmentColumns = (
+  onEdit: (shipment: Shipment) => void
+): ColumnDef<Shipment>[] => [
   {
     accessorKey: "tracking_number",
     header: ({ column }) => (
@@ -26,44 +29,49 @@ export const shipmentColumns: ColumnDef<Shipment>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: "title",
-    header: "Title",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "priority",
-    header: "Priority",
-  },
-  {
-    accessorKey: "origin",
-    header: "Origin",
-  },
-  {
-    accessorKey: "destination",
-    header: "Destination",
-  },
+  { accessorKey: "title", header: "Title" },
+  { accessorKey: "status", header: "Status" },
+  { accessorKey: "priority", header: "Priority" },
+  { accessorKey: "origin", header: "Origin" },
+  { accessorKey: "destination", header: "Destination" },
   {
     accessorKey: "scheduled_date",
     header: "Scheduled Date",
     cell: ({ row }) => {
-      const date = row.getValue("scheduled_date") as Date | undefined;
-      return date instanceof Date && !isNaN(date.getTime())
-        ? date.toLocaleDateString()
+      const raw = row.getValue("scheduled_date");
+      const date = raw ? new Date(raw as string) : null;
+      return date && !isNaN(date.getTime())
+        ? date.toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" })
         : "-";
+    },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const shipment = row.original;
+      return (
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-blue-600 hover:underline flex items-center gap-1"
+          onClick={() => onEdit(shipment)}
+        >
+          <PencilIcon className="w-4 h-4" />
+          Edit
+        </Button>
+      );
     },
   },
 ];
 
-export default function ShipmentTable({ data }: ShipmentTableProps) {
+export default function ShipmentTable({ data, onEdit }: ShipmentTableProps) {
   return (
     <DataTable
-      columns={shipmentColumns}
+      columns={shipmentColumns(onEdit)}
       data={data}
       searchPlaceholder="Search shipments..."
     />
   );
 }
+

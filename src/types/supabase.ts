@@ -81,6 +81,13 @@ export type Database = {
             foreignKeyName: "audit_logs_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "audit_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -146,6 +153,13 @@ export type Database = {
             foreignKeyName: "incidents_assigned_to_fkey"
             columns: ["assigned_to"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "incidents_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -153,8 +167,22 @@ export type Database = {
             foreignKeyName: "incidents_reported_by_fkey"
             columns: ["reported_by"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "incidents_reported_by_fkey"
+            columns: ["reported_by"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "incidents_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "incidents_resolved_by_fkey"
@@ -354,6 +382,13 @@ export type Database = {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -438,6 +473,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "shipments"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipment_updates_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "shipment_updates_updated_by_fkey"
@@ -547,6 +589,13 @@ export type Database = {
             foreignKeyName: "shipments_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "shipments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -556,6 +605,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "warehouses"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "shipments_driver_id_fkey"
@@ -579,6 +635,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_preferences: {
+        Row: {
+          beta_features_enabled: boolean | null
+          language: string | null
+          notifications_enabled: boolean | null
+          sidebar_collapsed: boolean | null
+          theme: string | null
+          timezone: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          beta_features_enabled?: boolean | null
+          language?: string | null
+          notifications_enabled?: boolean | null
+          sidebar_collapsed?: boolean | null
+          theme?: string | null
+          timezone?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          beta_features_enabled?: boolean | null
+          language?: string | null
+          notifications_enabled?: boolean | null
+          sidebar_collapsed?: boolean | null
+          theme?: string | null
+          timezone?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       users: {
         Row: {
@@ -678,6 +767,13 @@ export type Database = {
             foreignKeyName: "vehicles_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "vehicles_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -728,6 +824,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "warehouses_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
           {
             foreignKeyName: "warehouses_manager_id_fkey"
             columns: ["manager_id"]
@@ -799,6 +902,13 @@ export type Database = {
             foreignKeyName: "shipments_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "shipments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -808,6 +918,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "warehouses"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
           },
           {
             foreignKeyName: "shipments_driver_id_fkey"
@@ -873,16 +990,34 @@ export type Database = {
             foreignKeyName: "shipment_updates_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
+            referencedRelation: "user_roles_view"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "shipment_updates_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_roles_view: {
+        Row: {
+          role: string | null
+          user_id: string | null
+        }
+        Relationships: []
       }
     }
     Functions: {
       get_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       verify_schema: {
         Args: Record<PropertyKey, never>

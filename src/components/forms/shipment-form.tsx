@@ -66,6 +66,27 @@ export default function ShipmentForm({
     else router.push("/admin/shipments");
   };
 
+  const handleDelete = async () => {
+    const confirmed = confirm("Are you sure you want to delete this shipment?");
+    if (!confirmed) return;
+
+    setLoading(true);
+
+    const { error } = await supabase
+      .from("shipments")
+      .delete()
+      .eq("id", initialData?.id);
+
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push("/admin/shipments");
+    router.refresh();
+  };
+
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
@@ -94,9 +115,25 @@ export default function ShipmentForm({
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
-      <Button type="submit" disabled={loading}>
-        {loading ? "Saving..." : isEdit ? "Update Shipment" : "Create Shipment"}
-      </Button>
+      <div className="flex justify-between items-center gap-4">
+        <Button type="submit" disabled={loading}>
+          {loading
+            ? "Saving..."
+            : isEdit
+            ? "Update Shipment"
+            : "Create Shipment"}
+        </Button>
+        {isEdit && (
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            Delete Shipment
+          </Button>
+        )}
+      </div>
     </form>
   );
 }
