@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 import {
-  CreateWarehouseSchema,
-  UpdateWarehouseSchema,
+  WarehouseInsertSchema,
+  WarehouseUpdateSchema,
 } from "@/types/zod-schema";
 
 type WarehouseFilters = {
@@ -47,7 +47,7 @@ export async function getWarehouseById(id: string) {
 /**
  * Create a new warehouse.
  */
-export async function createWarehouse(data: z.infer<typeof CreateWarehouseSchema>) {
+export async function createWarehouse(data: z.infer<typeof WarehouseInsertSchema>) {
   const supabase = await createClient();
   return supabase.from("warehouses").insert(data).select().single();
 }
@@ -55,7 +55,7 @@ export async function createWarehouse(data: z.infer<typeof CreateWarehouseSchema
 /**
  * Update an existing warehouse.
  */
-export async function updateWarehouse(id: string, data: z.infer<typeof UpdateWarehouseSchema>) {
+export async function updateWarehouse(id: string, data: z.infer<typeof WarehouseUpdateSchema>) {
   const supabase = await createClient();
   return supabase.from("warehouses").update(data).eq("id", id).select().single();
 }

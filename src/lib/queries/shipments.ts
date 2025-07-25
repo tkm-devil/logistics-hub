@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 import {
-  CreateShipmentSchema,
-  UpdateShipmentSchema,
+  ShipmentInsertSchema,
+  ShipmentUpdateSchema,
   ShipmentFilterSchema,
 } from "@/types/zod-schema";
 
@@ -67,7 +67,7 @@ export async function getShipmentById(id: string) {
  * Create a new shipment.
  */
 export async function createShipment(
-  data: z.infer<typeof CreateShipmentSchema>
+  data: z.infer<typeof ShipmentInsertSchema>
 ) {
   const supabase = await createClient();
   return supabase.from("shipments").insert(data).select().single();
@@ -78,7 +78,7 @@ export async function createShipment(
  */
 export async function updateShipment(
   id: string,
-  data: z.infer<typeof UpdateShipmentSchema>
+  data: z.infer<typeof ShipmentUpdateSchema>
 ) {
   const supabase = await createClient();
   return supabase.from("shipments").update(data).eq("id", id).select().single();

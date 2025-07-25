@@ -6,11 +6,11 @@ import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, CheckCircle, PencilIcon, XCircle } from "lucide-react";
 import { z } from "zod";
-import { UserSchema } from "@/types/zod-schema";
+import { UserRowSchema } from "@/types/zod-schema";
 import Link from "next/link";
 import { useMemo } from "react";
 
-export type User = z.infer<typeof UserSchema>;
+export type User = z.infer<typeof UserRowSchema>;
 
 interface UserTableProps {
   data: User[];

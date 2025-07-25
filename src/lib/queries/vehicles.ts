@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 import {
-  CreateVehicleSchema,
-  UpdateVehicleSchema,
+  VehicleInsertSchema,
+  VehicleUpdateSchema,
 } from "@/types/zod-schema";
 
 type VehicleFilters = {
@@ -52,7 +52,7 @@ export async function getVehicleById(id: string) {
 /**
  * Create a new vehicle.
  */
-export async function createVehicle(data: z.infer<typeof CreateVehicleSchema>) {
+export async function createVehicle(data: z.infer<typeof VehicleInsertSchema>) {
   const supabase = await createClient();
   return supabase.from("vehicles").insert(data).select().single();
 }
@@ -60,7 +60,7 @@ export async function createVehicle(data: z.infer<typeof CreateVehicleSchema>) {
 /**
  * Update an existing vehicle.
  */
-export async function updateVehicle(id: string, data: z.infer<typeof UpdateVehicleSchema>) {
+export async function updateVehicle(id: string, data: z.infer<typeof VehicleUpdateSchema>) {
   const supabase = await createClient();
   return supabase.from("vehicles").update(data).eq("id", id).select().single();
 }

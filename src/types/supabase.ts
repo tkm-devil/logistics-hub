@@ -1,41 +1,8 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
-
 export type Database = {
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
-  }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          operationName?: string
-          query?: string
-          variables?: Json
-          extensions?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
   }
   public: {
     Tables: {
@@ -45,8 +12,8 @@ export type Database = {
           created_at: string | null
           id: string
           ip_address: unknown | null
-          new_values: Json | null
-          old_values: Json | null
+          new_values: JSON | null
+          old_values: JSON | null
           record_id: string | null
           table_name: string
           user_agent: string | null
@@ -57,8 +24,8 @@ export type Database = {
           created_at?: string | null
           id?: string
           ip_address?: unknown | null
-          new_values?: Json | null
-          old_values?: Json | null
+          new_values?: JSON | null
+          old_values?: JSON | null
           record_id?: string | null
           table_name: string
           user_agent?: string | null
@@ -69,8 +36,8 @@ export type Database = {
           created_at?: string | null
           id?: string
           ip_address?: unknown | null
-          new_values?: Json | null
-          old_values?: Json | null
+          new_values?: JSON | null
+          old_values?: JSON | null
           record_id?: string | null
           table_name?: string
           user_agent?: string | null
@@ -1151,9 +1118,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },

@@ -6,9 +6,9 @@ import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, CheckCircle, XCircle } from "lucide-react";
 import { z } from "zod";
-import { NotificationSchema } from "@/types/zod-schema";
+import { NotificationRowSchema } from "@/types/zod-schema";
 
-export type Notification = z.infer<typeof NotificationSchema>;
+export type Notification = z.infer<typeof NotificationRowSchema>;
 
 interface NotificationTableProps {
   data: Notification[];

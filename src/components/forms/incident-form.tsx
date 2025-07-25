@@ -3,7 +3,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateIncidentSchema, UpdateIncidentSchema } from "@/types/zod-schema";
+import { IncidentInsertSchema, IncidentUpdateSchema } from "@/types/zod-schema";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,8 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export type CreateIncident = z.infer<typeof CreateIncidentSchema>;
-export type UpdateIncident = z.infer<typeof UpdateIncidentSchema>;
+export type CreateIncident = z.infer<typeof IncidentInsertSchema>;
+export type UpdateIncident = z.infer<typeof IncidentUpdateSchema>;
 
 interface IncidentFormProps {
   initialData?: Partial<UpdateIncident> & { id?: string };
@@ -40,7 +40,7 @@ export default function IncidentForm({
   const isEdit = !!initialData?.id;
 
   const form = useForm<CreateIncident | UpdateIncident>({
-    resolver: zodResolver(isEdit ? UpdateIncidentSchema : CreateIncidentSchema),
+    resolver: zodResolver(isEdit ? IncidentUpdateSchema : IncidentInsertSchema),
     defaultValues: {
       ...initialData,
       shipment_id: initialData?.shipment_id ?? "",
@@ -105,7 +105,7 @@ export default function IncidentForm({
       </Select>
 
       <Select
-        value={form.watch("severity")}
+        value={form.watch("severity") ?? ""}
         onValueChange={(value) => form.setValue("severity", value as any)}
       >
         <SelectTrigger>

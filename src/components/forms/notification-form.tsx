@@ -4,7 +4,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CreateNotificationSchema,
+  NotificationInsertSchema,
   NotificationTypeEnum,
   PriorityEnum,
 } from "@/types/zod-schema";
@@ -25,7 +25,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
-export type CreateNotification = z.infer<typeof CreateNotificationSchema>;
+export type CreateNotification = z.infer<typeof NotificationInsertSchema>;
 
 interface NotificationFormProps {
   initialData?: Partial<CreateNotification> & { id?: string };
@@ -55,7 +55,7 @@ export default function NotificationForm({
   };
 
   const form = useForm<CreateNotification>({
-    resolver: zodResolver(CreateNotificationSchema),
+    resolver: zodResolver(NotificationInsertSchema),
     defaultValues,
   });
 
@@ -104,7 +104,7 @@ export default function NotificationForm({
       <Textarea placeholder="Message" {...form.register("message")} />
 
       <Select
-        value={form.watch("priority")}
+        value={form.watch("priority") ?? ""}
         onValueChange={(val) =>
           form.setValue("priority", val as CreateNotification["priority"])
         }

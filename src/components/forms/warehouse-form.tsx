@@ -4,8 +4,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CreateWarehouseSchema,
-  UpdateWarehouseSchema,
+  WarehouseInsertSchema,
+  WarehouseUpdateSchema,
 } from "@/types/zod-schema";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
@@ -16,8 +16,8 @@ import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
-export type CreateWarehouse = z.infer<typeof CreateWarehouseSchema>;
-export type UpdateWarehouse = z.infer<typeof UpdateWarehouseSchema>;
+export type CreateWarehouse = z.infer<typeof WarehouseInsertSchema>;
+export type UpdateWarehouse = z.infer<typeof WarehouseUpdateSchema>;
 
 interface WarehouseFormProps {
   initialData?: Partial<UpdateWarehouse> & { id?: string };
@@ -37,7 +37,7 @@ export default function WarehouseForm({
 
   const form = useForm<CreateWarehouse | UpdateWarehouse>({
     resolver: zodResolver(
-      isEdit ? UpdateWarehouseSchema : CreateWarehouseSchema
+      isEdit ? WarehouseUpdateSchema : WarehouseInsertSchema
     ),
     defaultValues: {
       ...initialData,

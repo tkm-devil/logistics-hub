@@ -3,7 +3,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateShipmentSchema, UpdateShipmentSchema } from "@/types/zod-schema";
+import { ShipmentInsertSchema, ShipmentUpdateSchema } from "@/types/zod-schema";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,8 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
-export type CreateShipment = z.infer<typeof CreateShipmentSchema>;
-export type UpdateShipment = z.infer<typeof UpdateShipmentSchema>;
+export type CreateShipment = z.infer<typeof ShipmentInsertSchema>;
+export type UpdateShipment = z.infer<typeof ShipmentUpdateSchema>;
 
 interface ShipmentFormProps {
   initialData?: Partial<UpdateShipment> & { id?: string };
@@ -32,7 +32,7 @@ export default function ShipmentForm({
   const isEdit = !!initialData?.id;
 
   const form = useForm<CreateShipment | UpdateShipment>({
-    resolver: zodResolver(isEdit ? UpdateShipmentSchema : CreateShipmentSchema),
+    resolver: zodResolver(isEdit ? ShipmentUpdateSchema : ShipmentInsertSchema),
     defaultValues: {
       ...initialData,
       title: initialData?.title ?? "",

@@ -3,9 +3,22 @@
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 import {
-  CreateNotificationSchema,
+  NotificationInsertSchema,
   MarkNotificationReadSchema,
 } from "@/types/zod-schema";
+
+/**
+ * Get all notifications.
+ */
+export async function getAllNotifications() {
+  const supabase = await createClient();
+  return supabase
+    .from("notifications")
+    .select("*")
+    .order("read", { ascending: true })
+    .order("created_at", { ascending: false });
+}
+
 
 /**
  * Get all notifications for a specific user (sorted: unread first, then newest).
@@ -32,7 +45,7 @@ export async function getNotificationById(id: string) {
 /**
  * Create a new notification.
  */
-export async function createNotification(data: z.infer<typeof CreateNotificationSchema>) {
+export async function createNotification(data: z.infer<typeof NotificationInsertSchema>) {
   const supabase = await createClient();
   return supabase.from("notifications").insert(data).select().single();
 }

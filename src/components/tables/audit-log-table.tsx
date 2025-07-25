@@ -6,9 +6,9 @@ import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { z } from "zod";
-import { AuditLogSchema } from "@/types/zod-schema";
+import { AuditLogRowSchema } from "@/types/zod-schema";
 
-export type AuditLog = z.infer<typeof AuditLogSchema>;
+export type AuditLog = z.infer<typeof AuditLogRowSchema>;
 
 interface AuditLogTableProps {
   data: AuditLog[];

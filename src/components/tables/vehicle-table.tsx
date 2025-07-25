@@ -6,9 +6,9 @@ import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, Pencil, Trash } from "lucide-react";
 import { z } from "zod";
-import { VehicleSchema } from "@/types/zod-schema";
+import { VehicleRowSchema } from "@/types/zod-schema";
 
-export type Vehicle = z.infer<typeof VehicleSchema>;
+export type Vehicle = z.infer<typeof VehicleRowSchema>;
 
 interface VehicleTableProps {
   data: Vehicle[];

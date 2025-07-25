@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 import {
-  CreateUserSchema,
-  UpdateUserSchema,
+  UserInsertSchema,
+  UserUpdateSchema,
   UserFilterSchema,
 } from "@/types/zod-schema";
 
@@ -47,7 +47,7 @@ export async function getUserById(id: string) {
 /**
  * Create a new user.
  */
-export async function createUser(data: z.infer<typeof CreateUserSchema>) {
+export async function createUser(data: z.infer<typeof UserInsertSchema>) {
   const supabase = await createClient();
   return supabase.from("users").insert(data).select().single();
 }
@@ -57,7 +57,7 @@ export async function createUser(data: z.infer<typeof CreateUserSchema>) {
  */
 export async function updateUser(
   id: string,
-  data: z.infer<typeof UpdateUserSchema>
+  data: z.infer<typeof UserUpdateSchema>
 ) {
   const supabase = await createClient();
   return supabase.from("users").update(data).eq("id", id).select().single();

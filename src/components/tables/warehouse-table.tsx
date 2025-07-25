@@ -6,9 +6,9 @@ import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, CheckCircle, XCircle, Pencil, Trash } from "lucide-react";
 import { z } from "zod";
-import { WarehouseSchema } from "@/types/zod-schema";
+import { WarehouseRowSchema } from "@/types/zod-schema";
 
-export type Warehouse = z.infer<typeof WarehouseSchema>;
+export type Warehouse = z.infer<typeof WarehouseRowSchema>;
 
 interface WarehouseTableProps {
   data: Warehouse[];

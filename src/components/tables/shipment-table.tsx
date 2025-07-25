@@ -6,9 +6,9 @@ import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, PencilIcon } from "lucide-react";
 import { z } from "zod";
-import { ShipmentSchema } from "@/types/zod-schema";
+import { ShipmentRowSchema } from "@/types/zod-schema";
 
-export type Shipment = z.infer<typeof ShipmentSchema>;
+export type Shipment = z.infer<typeof ShipmentRowSchema>;
 
 interface ShipmentTableProps {
   data: Shipment[];

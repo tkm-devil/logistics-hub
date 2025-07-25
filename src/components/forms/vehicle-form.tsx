@@ -3,7 +3,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateVehicleSchema, UpdateVehicleSchema } from "@/types/zod-schema";
+import { VehicleInsertSchema, VehicleUpdateSchema } from "@/types/zod-schema";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,8 +19,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export type CreateVehicle = z.infer<typeof CreateVehicleSchema>;
-export type UpdateVehicle = z.infer<typeof UpdateVehicleSchema>;
+export type CreateVehicle = z.infer<typeof VehicleInsertSchema>;
+export type UpdateVehicle = z.infer<typeof VehicleUpdateSchema>;
 
 interface VehicleFormProps {
   initialData?: Partial<UpdateVehicle> & { id?: string };
@@ -39,7 +39,7 @@ export default function VehicleForm({
   const isEdit = !!initialData?.id;
 
   const form = useForm<CreateVehicle | UpdateVehicle>({
-    resolver: zodResolver(isEdit ? UpdateVehicleSchema : CreateVehicleSchema),
+    resolver: zodResolver(isEdit ? VehicleUpdateSchema : VehicleInsertSchema),
     defaultValues: {
       ...initialData,
       license_plate: initialData?.license_plate ?? "",

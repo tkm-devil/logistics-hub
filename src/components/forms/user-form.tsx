@@ -3,7 +3,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateUserSchema, UpdateUserSchema } from "@/types/zod-schema";
+import { UserInsertSchema, UserUpdateSchema } from "@/types/zod-schema";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -31,8 +31,8 @@ import {
 import { getRolesClient } from "@/lib/queries/roles-client";
 import { RoleEnum } from "@/types/zod-schema";
 
-export type CreateUser = z.infer<typeof CreateUserSchema>;
-export type UpdateUser = z.infer<typeof UpdateUserSchema>;
+export type CreateUser = z.infer<typeof UserInsertSchema>;
+export type UpdateUser = z.infer<typeof UserUpdateSchema>;
 
 type RoleName = z.infer<typeof RoleEnum>;
 
@@ -51,7 +51,7 @@ export default function UserForm({ initialData, onSuccess }: UserFormProps) {
   const isEdit = !!initialData?.id;
 
   const form = useForm<CreateUser | UpdateUser>({
-    resolver: zodResolver(isEdit ? UpdateUserSchema : CreateUserSchema),
+    resolver: zodResolver(isEdit ? UserUpdateSchema : UserInsertSchema),
     defaultValues: {
       ...initialData,
       name: initialData?.name ?? "",
@@ -159,7 +159,7 @@ export default function UserForm({ initialData, onSuccess }: UserFormProps) {
             <FormItem>
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter phone number" {...field} />
+                <Input placeholder="Enter phone number" {...field} value={field.value ?? ""}/>
               </FormControl>
               <FormMessage />
             </FormItem>

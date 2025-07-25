@@ -6,9 +6,9 @@ import { DataTable } from "./data-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, CheckCircle, XCircle, Pencil, Trash } from "lucide-react";
 import { z } from "zod";
-import { IncidentSchema } from "@/types/zod-schema";
+import { IncidentRowSchema } from "@/types/zod-schema";
 
-export type Incident = z.infer<typeof IncidentSchema>;
+export type Incident = z.infer<typeof IncidentRowSchema>;
 
 interface IncidentTableProps {
   data: Incident[];

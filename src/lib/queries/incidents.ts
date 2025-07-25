@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/client";
 import {
-  CreateIncidentSchema,
-  UpdateIncidentSchema,
+  IncidentInsertSchema,
+  IncidentUpdateSchema,
   ResolveIncidentSchema,
 } from "@/types/zod-schema";
 
@@ -53,7 +53,7 @@ export async function getIncidentById(id: string) {
 /**
  * Create a new incident.
  */
-export async function createIncident(data: z.infer<typeof CreateIncidentSchema>) {
+export async function createIncident(data: z.infer<typeof IncidentInsertSchema>) {
   const supabase = await createClient();
   return supabase.from("incidents").insert(data).select().single();
 }
@@ -61,7 +61,7 @@ export async function createIncident(data: z.infer<typeof CreateIncidentSchema>)
 /**
  * Update an incident.
  */
-export async function updateIncident(id: string, data: z.infer<typeof UpdateIncidentSchema>) {
+export async function updateIncident(id: string, data: z.infer<typeof IncidentUpdateSchema>) {
   const supabase = await createClient();
   return supabase.from("incidents").update(data).eq("id", id).select().single();
 }
