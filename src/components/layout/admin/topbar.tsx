@@ -1,4 +1,4 @@
-// components/layout/topbar.tsx
+// components/layout/admin/topbar.tsx
 "use client";
 
 import { useTheme } from "next-themes";

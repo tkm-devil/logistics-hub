@@ -1,8 +1,8 @@
-// components/layout/admin-layout.tsx
+// components/layout/admin/admin-layout.tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import Sidebar from "./sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import Topbar from "./topbar";
 import AuthGuard from "./auth-guard";
 import { cn } from "@/lib/utils";

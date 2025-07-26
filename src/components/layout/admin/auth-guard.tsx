@@ -1,4 +1,4 @@
-// components/layout/auth-guard.tsx
+// components/layout/admin/auth-guard.tsx
 "use client";
 
 import { useEffect, useState } from "react";
